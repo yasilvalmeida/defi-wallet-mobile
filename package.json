@@ -1,0 +1,32 @@
+{
+  "name": "defi-wallet-mobile",
+  "version": "1.0.0",
+  "description": "A cross-platform React Native mobile wallet for DeFi on Solana and Ethereum",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "frontend": "cd frontend && npm start",
+    "backend": "cd backend && npm run start:dev",
+    "frontend:android": "cd frontend && npm run android",
+    "frontend:ios": "cd frontend && npm run ios",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "build:backend": "cd backend && npm run build",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd frontend && npm test",
+    "test:backend": "cd backend && npm test",
+    "test:e2e": "cd backend && npm run test:e2e",
+    "test:coverage": "npm run test:frontend -- --coverage && npm run test:backend -- --coverage",
+    "test:ci": "npm run test:frontend -- --ci --coverage --watchAll=false && npm run test:backend -- --ci --coverage"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
