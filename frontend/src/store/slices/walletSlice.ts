@@ -1,157 +1,98 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WalletConnection, WalletAccount, Network, WalletType } from '../../types/wallet';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { WalletState, ConnectWalletResponse } from '../../types/wallet';
+import { Linking } from 'react-native';
+import { PublicKey } from '@solana/web3.js';
 
-interface WalletState {
-  connections: Record<WalletType, WalletConnection>;
-  selectedWallet?: WalletType;
-  selectedNetwork: Network;
-  isConnecting: boolean;
-  error?: string;
-}
+// Phantom Wallet deeplink integration for React Native
+const PHANTOM_CONNECT_URL = 'https://phantom.app/ul/browse/https://defi-wallet-mobile.com/connect';
+
+// Async thunk for connecting to Phantom wallet
+export const connectPhantomWallet = createAsyncThunk(
+  'wallet/connectPhantom',
+  async (_, { rejectWithValue }) => {
+    try {
+      // For React Native, we use deeplinks to connect to Phantom
+      // This is a simulation - in real implementation, you'd use Phantom's deeplink protocol
+      
+      // Simulate connection delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Mock successful connection for development
+      const mockAddress = 'DemoPhantomWallet1234567890abcdef123456789';
+      
+      return {
+        address: mockAddress,
+        publicKey: mockAddress,
+      } as ConnectWalletResponse;
+      
+    } catch (error) {
+      return rejectWithValue('Failed to connect to Phantom wallet');
+    }
+  }
+);
+
+// Async thunk for disconnecting wallet
+export const disconnectWallet = createAsyncThunk(
+  'wallet/disconnect',
+  async () => {
+    // Simulate disconnect delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return;
+  }
+);
 
 const initialState: WalletState = {
-  connections: {
-    [WalletType.PHANTOM]: {
-      isConnected: false,
-      accounts: [],
-      network: Network.SOLANA_MAINNET,
-    },
-    [WalletType.METAMASK]: {
-      isConnected: false,
-      accounts: [],
-      network: Network.ETHEREUM_MAINNET,
-    },
-    [WalletType.WALLETCONNECT]: {
-      isConnected: false,
-      accounts: [],
-      network: Network.ETHEREUM_MAINNET,
-    },
-  },
-  selectedNetwork: Network.SOLANA_MAINNET,
+  isConnected: false,
+  address: null,
   isConnecting: false,
+  error: null,
 };
 
 const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
-    setConnecting: (state, action: PayloadAction<boolean>) => {
-      state.isConnecting = action.payload;
-      if (action.payload) {
-        state.error = undefined;
-      }
-    },
-    
-    setWalletConnection: (state, action: PayloadAction<{ 
-      walletType: WalletType; 
-      connection: WalletConnection 
-    }>) => {
-      const { walletType, connection } = action.payload;
-      state.connections[walletType] = connection;
-      
-      if (connection.isConnected) {
-        state.selectedWallet = walletType;
-        state.selectedNetwork = connection.network;
-      }
-      
-      state.isConnecting = false;
-      state.error = undefined;
-    },
-    
-    setSelectedWallet: (state, action: PayloadAction<WalletType>) => {
-      state.selectedWallet = action.payload;
-      const connection = state.connections[action.payload];
-      if (connection.isConnected) {
-        state.selectedNetwork = connection.network;
-      }
-    },
-    
-    setSelectedNetwork: (state, action: PayloadAction<Network>) => {
-      state.selectedNetwork = action.payload;
-      
-      // Update the selected wallet's network if connected
-      if (state.selectedWallet) {
-        const connection = state.connections[state.selectedWallet];
-        if (connection.isConnected) {
-          connection.network = action.payload;
-        }
-      }
-    },
-    
-    setSelectedAccount: (state, action: PayloadAction<{
-      walletType: WalletType;
-      account: WalletAccount;
-    }>) => {
-      const { walletType, account } = action.payload;
-      const connection = state.connections[walletType];
-      if (connection) {
-        connection.selectedAccount = account;
-      }
-    },
-    
-    updateAccountBalance: (state, action: PayloadAction<{
-      walletType: WalletType;
-      address: string;
-      balance: number;
-    }>) => {
-      const { walletType, address, balance } = action.payload;
-      const connection = state.connections[walletType];
-      
-      if (connection) {
-        const account = connection.accounts.find(acc => acc.address === address);
-        if (account) {
-          account.balance = balance;
-        }
-      }
-    },
-    
-    disconnectWallet: (state, action: PayloadAction<WalletType>) => {
-      const walletType = action.payload;
-      state.connections[walletType] = {
-        isConnected: false,
-        accounts: [],
-        network: walletType === WalletType.PHANTOM ? Network.SOLANA_MAINNET : Network.ETHEREUM_MAINNET,
-      };
-      
-      if (state.selectedWallet === walletType) {
-        state.selectedWallet = undefined;
-      }
-    },
-    
-    disconnectAllWallets: (state) => {
-      Object.keys(state.connections).forEach(walletType => {
-        const wType = walletType as WalletType;
-        state.connections[wType] = {
-          isConnected: false,
-          accounts: [],
-          network: wType === WalletType.PHANTOM ? Network.SOLANA_MAINNET : Network.ETHEREUM_MAINNET,
-        };
-      });
-      state.selectedWallet = undefined;
-    },
-    
-    setError: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
-      state.isConnecting = false;
-    },
-    
     clearError: (state) => {
-      state.error = undefined;
+      state.error = null;
     },
+    resetWallet: (state) => {
+      state.isConnected = false;
+      state.address = null;
+      state.isConnecting = false;
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // Connect Phantom Wallet
+      .addCase(connectPhantomWallet.pending, (state) => {
+        state.isConnecting = true;
+        state.error = null;
+      })
+      .addCase(connectPhantomWallet.fulfilled, (state, action) => {
+        state.isConnecting = false;
+        state.isConnected = true;
+        state.address = action.payload.address;
+        state.error = null;
+      })
+      .addCase(connectPhantomWallet.rejected, (state, action) => {
+        state.isConnecting = false;
+        state.isConnected = false;
+        state.address = null;
+        state.error = action.payload as string;
+      })
+      // Disconnect Wallet
+      .addCase(disconnectWallet.pending, (state) => {
+        state.isConnecting = true;
+      })
+      .addCase(disconnectWallet.fulfilled, (state) => {
+        state.isConnected = false;
+        state.address = null;
+        state.isConnecting = false;
+        state.error = null;
+      });
   },
 });
 
-export const {
-  setConnecting,
-  setWalletConnection,
-  setSelectedWallet,
-  setSelectedNetwork,
-  setSelectedAccount,
-  updateAccountBalance,
-  disconnectWallet,
-  disconnectAllWallets,
-  setError,
-  clearError,
-} = walletSlice.actions;
-
-export default walletSlice.reducer; 
+export const { clearError, resetWallet } = walletSlice.actions;
+export default walletSlice.reducer;

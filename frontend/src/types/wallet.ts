@@ -1,54 +1,20 @@
-export enum WalletType {
-  PHANTOM = 'phantom',
-  METAMASK = 'metamask',
-  WALLETCONNECT = 'walletconnect',
+export interface WalletState {
+  isConnected: boolean;
+  address: string | null;
+  isConnecting: boolean;
+  error: string | null;
 }
 
-export enum Network {
-  SOLANA_MAINNET = 'solana_mainnet',
-  SOLANA_TESTNET = 'solana_testnet',
-  SOLANA_DEVNET = 'solana_devnet',
-  ETHEREUM_MAINNET = 'ethereum_mainnet',
-  ETHEREUM_TESTNET = 'ethereum_testnet',
-  ETHEREUM_DEVNET = 'ethereum_devnet',
+export interface PhantomProvider {
+  isPhantom: boolean;
+  connect(): Promise<{ publicKey: { toString(): string } }>;
+  disconnect(): Promise<void>;
+  signTransaction(transaction: any): Promise<any>;
+  signAllTransactions(transactions: any[]): Promise<any[]>;
+  signMessage(message: Uint8Array): Promise<{ signature: Uint8Array }>;
 }
 
-export interface WalletAccount {
+export interface ConnectWalletResponse {
   address: string;
   publicKey: string;
-  network: Network;
-  walletType: WalletType;
-  balance?: number;
-  isConnected: boolean;
 }
-
-export interface WalletConnection {
-  isConnected: boolean;
-  accounts: WalletAccount[];
-  selectedAccount?: WalletAccount;
-  network: Network;
-}
-
-export interface WalletConnectOptions {
-  walletType: WalletType;
-  network: Network;
-  autoConnect?: boolean;
-}
-
-export interface WalletTransactionRequest {
-  to: string;
-  amount: number;
-  token?: string;
-  network: Network;
-  gasLimit?: number;
-  gasPrice?: number;
-  data?: string;
-}
-
-export interface WalletTransactionResult {
-  hash: string;
-  success: boolean;
-  confirmations: number;
-  gasUsed?: number;
-  error?: string;
-} 

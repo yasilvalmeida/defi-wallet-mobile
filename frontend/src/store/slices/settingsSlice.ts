@@ -1,139 +1,261 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { SettingsState, ConnectedWallet, CustomRPC, CustomToken, PriceAlert } from '../../types/settings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export interface AppSettings {
-  theme: 'light' | 'dark' | 'system';
-  currency: 'USD' | 'EUR' | 'GBP' | 'JPY';
-  language: 'en' | 'es' | 'fr' | 'de' | 'ja' | 'zh';
-  notifications: {
-    enabled: boolean;
-    priceAlerts: boolean;
-    transactionAlerts: boolean;
-    newsAlerts: boolean;
-    pushNotifications: boolean;
-  };
-  security: {
-    biometricAuth: boolean;
-    autoLock: boolean;
-    autoLockTime: number; // minutes
-    requireAuthForSend: boolean;
-  };
-  trading: {
-    defaultSlippage: number;
-    showTestnets: boolean;
-    confirmTransactions: boolean;
-    soundEnabled: boolean;
-  };
-  display: {
-    hideSmallBalances: boolean;
-    balanceThreshold: number; // USD
-    showPercentages: boolean;
-    compactMode: boolean;
-  };
-}
+// Async thunk for loading settings from storage
+export const loadSettings = createAsyncThunk(
+  'settings/loadSettings',
+  async (_, { rejectWithValue }) => {
+    try {
+      const settingsString = await AsyncStorage.getItem('app_settings');
+      if (settingsString) {
+        return JSON.parse(settingsString);
+      }
+      return null;
+    } catch (error) {
+      return rejectWithValue('Failed to load settings');
+    }
+  }
+);
 
-interface SettingsState {
-  settings: AppSettings;
-  isLoading: boolean;
-  hasHydrated: boolean;
-}
+// Async thunk for saving settings to storage
+export const saveSettings = createAsyncThunk(
+  'settings/saveSettings',
+  async (settings: Partial<SettingsState>, { rejectWithValue }) => {
+    try {
+      await AsyncStorage.setItem('app_settings', JSON.stringify(settings));
+      return settings;
+    } catch (error) {
+      return rejectWithValue('Failed to save settings');
+    }
+  }
+);
+
+// Async thunk for adding custom token
+export const addCustomToken = createAsyncThunk(
+  'settings/addCustomToken',
+  async (token: Omit<CustomToken, 'id' | 'addedAt'>, { rejectWithValue }) => {
+    try {
+      // Simulate token validation API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const newToken: CustomToken = {
+        ...token,
+        id: `custom_${Date.now()}`,
+        addedAt: Date.now(),
+      };
+      
+      return newToken;
+    } catch (error) {
+      return rejectWithValue('Failed to add custom token');
+    }
+  }
+);
+
+// Async thunk for adding custom RPC
+export const addCustomRPC = createAsyncThunk(
+  'settings/addCustomRPC',
+  async (rpc: Omit<CustomRPC, 'id'>, { rejectWithValue }) => {
+    try {
+      // Simulate RPC validation
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const newRPC: CustomRPC = {
+        ...rpc,
+        id: `rpc_${Date.now()}`,
+      };
+      
+      return newRPC;
+    } catch (error) {
+      return rejectWithValue('Failed to add custom RPC');
+    }
+  }
+);
 
 const initialState: SettingsState = {
-  settings: {
-    theme: 'system',
-    currency: 'USD',
-    language: 'en',
-    notifications: {
-      enabled: true,
-      priceAlerts: true,
-      transactionAlerts: true,
-      newsAlerts: false,
-      pushNotifications: true,
+  // App Preferences
+  theme: 'dark',
+  currency: 'USD',
+  language: 'en',
+  defaultNetwork: 'solana',
+  
+  // Security Settings
+  biometricEnabled: false,
+  autoLockEnabled: true,
+  autoLockTimer: 5, // 5 minutes
+  pinEnabled: false,
+  securityWarningsEnabled: true,
+  
+  // Notification Preferences
+  pushNotificationsEnabled: true,
+  transactionNotificationsEnabled: true,
+  priceAlertsEnabled: false,
+  portfolioUpdatesEnabled: true,
+  marketNewsEnabled: false,
+  
+  // Wallet Management
+  connectedWallets: [],
+  customRPCs: [
+    {
+      id: 'default_solana',
+      name: 'Solana Mainnet (Default)',
+      network: 'solana',
+      url: 'https://api.mainnet-beta.solana.com',
+      isDefault: true,
     },
-    security: {
-      biometricAuth: false,
-      autoLock: true,
-      autoLockTime: 5,
-      requireAuthForSend: true,
+    {
+      id: 'default_ethereum',
+      name: 'Ethereum Mainnet (Default)',
+      network: 'ethereum',
+      url: 'https://mainnet.infura.io/v3/YOUR_KEY',
+      chainId: 1,
+      isDefault: true,
     },
-    trading: {
-      defaultSlippage: 0.5,
-      showTestnets: false,
-      confirmTransactions: true,
-      soundEnabled: true,
-    },
-    display: {
-      hideSmallBalances: false,
-      balanceThreshold: 1,
-      showPercentages: true,
-      compactMode: false,
-    },
-  },
-  isLoading: false,
-  hasHydrated: false,
+  ],
+  customTokens: [],
+  
+  // Display Preferences
+  hideSmallBalances: false,
+  smallBalanceThreshold: 1.0, // $1.00
+  showTestNetworks: false,
+  compactMode: false,
+  
+  // Privacy Settings
+  analyticsEnabled: true,
+  crashReportingEnabled: true,
+  
+  // App Info
+  appVersion: '1.0.0',
+  buildNumber: '100',
+  lastUpdated: Date.now(),
 };
 
 const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setSettings: (state, action: PayloadAction<Partial<AppSettings>>) => {
-      state.settings = { ...state.settings, ...action.payload };
+    updateSetting: (state, action: PayloadAction<{ key: keyof SettingsState; value: any }>) => {
+      const { key, value } = action.payload;
+      (state as any)[key] = value;
+      state.lastUpdated = Date.now();
     },
     
-    updateNotificationSettings: (state, action: PayloadAction<Partial<AppSettings['notifications']>>) => {
-      state.settings.notifications = { ...state.settings.notifications, ...action.payload };
+    addConnectedWallet: (state, action: PayloadAction<ConnectedWallet>) => {
+      state.connectedWallets.push(action.payload);
+      state.lastUpdated = Date.now();
     },
     
-    updateSecuritySettings: (state, action: PayloadAction<Partial<AppSettings['security']>>) => {
-      state.settings.security = { ...state.settings.security, ...action.payload };
+    removeConnectedWallet: (state, action: PayloadAction<string>) => {
+      state.connectedWallets = state.connectedWallets.filter(
+        wallet => wallet.id !== action.payload
+      );
+      state.lastUpdated = Date.now();
     },
     
-    updateTradingSettings: (state, action: PayloadAction<Partial<AppSettings['trading']>>) => {
-      state.settings.trading = { ...state.settings.trading, ...action.payload };
+    updateConnectedWallet: (state, action: PayloadAction<{ id: string; updates: Partial<ConnectedWallet> }>) => {
+      const { id, updates } = action.payload;
+      const walletIndex = state.connectedWallets.findIndex(wallet => wallet.id === id);
+      if (walletIndex !== -1) {
+        state.connectedWallets[walletIndex] = {
+          ...state.connectedWallets[walletIndex],
+          ...updates,
+        };
+      }
+      state.lastUpdated = Date.now();
     },
     
-    updateDisplaySettings: (state, action: PayloadAction<Partial<AppSettings['display']>>) => {
-      state.settings.display = { ...state.settings.display, ...action.payload };
+    removeCustomToken: (state, action: PayloadAction<string>) => {
+      state.customTokens = state.customTokens.filter(
+        token => token.id !== action.payload
+      );
+      state.lastUpdated = Date.now();
     },
     
-    setTheme: (state, action: PayloadAction<'light' | 'dark' | 'system'>) => {
-      state.settings.theme = action.payload;
+    removeCustomRPC: (state, action: PayloadAction<string>) => {
+      state.customRPCs = state.customRPCs.filter(
+        rpc => rpc.id !== action.payload && !rpc.isDefault
+      );
+      state.lastUpdated = Date.now();
     },
     
-    setCurrency: (state, action: PayloadAction<'USD' | 'EUR' | 'GBP' | 'JPY'>) => {
-      state.settings.currency = action.payload;
-    },
-    
-    setLanguage: (state, action: PayloadAction<'en' | 'es' | 'fr' | 'de' | 'ja' | 'zh'>) => {
-      state.settings.language = action.payload;
-    },
-    
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
-    
-    setHydrated: (state, action: PayloadAction<boolean>) => {
-      state.hasHydrated = action.payload;
+    setDefaultRPC: (state, action: PayloadAction<{ network: 'solana' | 'ethereum'; rpcId: string }>) => {
+      const { network, rpcId } = action.payload;
+      state.customRPCs.forEach(rpc => {
+        if (rpc.network === network) {
+          rpc.isDefault = rpc.id === rpcId;
+        }
+      });
+      state.lastUpdated = Date.now();
     },
     
     resetSettings: (state) => {
-      state.settings = initialState.settings;
+      // Keep user's connected wallets and custom tokens but reset preferences
+      const { connectedWallets, customTokens, customRPCs } = state;
+      Object.assign(state, {
+        ...initialState,
+        connectedWallets,
+        customTokens,
+        customRPCs,
+        lastUpdated: Date.now(),
+      });
     },
+    
+    toggleTheme: (state) => {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      state.lastUpdated = Date.now();
+    },
+  },
+  
+  extraReducers: (builder) => {
+    builder
+      // Load settings
+      .addCase(loadSettings.fulfilled, (state, action) => {
+        if (action.payload) {
+          Object.assign(state, action.payload);
+        }
+      })
+      .addCase(loadSettings.rejected, (state, action) => {
+        console.error('Failed to load settings:', action.payload);
+      })
+      
+      // Save settings
+      .addCase(saveSettings.fulfilled, (state, action) => {
+        // Settings saved successfully
+      })
+      .addCase(saveSettings.rejected, (state, action) => {
+        console.error('Failed to save settings:', action.payload);
+      })
+      
+      // Add custom token
+      .addCase(addCustomToken.fulfilled, (state, action) => {
+        state.customTokens.push(action.payload);
+        state.lastUpdated = Date.now();
+      })
+      .addCase(addCustomToken.rejected, (state, action) => {
+        console.error('Failed to add custom token:', action.payload);
+      })
+      
+      // Add custom RPC
+      .addCase(addCustomRPC.fulfilled, (state, action) => {
+        state.customRPCs.push(action.payload);
+        state.lastUpdated = Date.now();
+      })
+      .addCase(addCustomRPC.rejected, (state, action) => {
+        console.error('Failed to add custom RPC:', action.payload);
+      });
   },
 });
 
 export const {
-  setSettings,
-  updateNotificationSettings,
-  updateSecuritySettings,
-  updateTradingSettings,
-  updateDisplaySettings,
-  setTheme,
-  setCurrency,
-  setLanguage,
-  setLoading,
-  setHydrated,
+  updateSetting,
+  addConnectedWallet,
+  removeConnectedWallet,
+  updateConnectedWallet,
+  removeCustomToken,
+  removeCustomRPC,
+  setDefaultRPC,
   resetSettings,
+  toggleTheme,
 } = settingsSlice.actions;
 
-export default settingsSlice.reducer; 
+export default settingsSlice.reducer;

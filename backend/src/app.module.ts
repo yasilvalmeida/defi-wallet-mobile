@@ -4,6 +4,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 import configuration from './config/configuration';
 import { HealthModule } from './modules/health/health.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { HealthModule } from './modules/health/health.module';
 
     // Feature modules
     HealthModule,
+    NotificationsModule,
   ],
 })
 export class AppModule {}

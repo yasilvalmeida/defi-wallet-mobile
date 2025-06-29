@@ -1,133 +1,94 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Portfolio, TokenBalance, Transaction } from '../../types/portfolio';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { Portfolio, PortfolioState, Token } from '../../types/portfolio';
 
-interface PortfolioState {
-  portfolios: Record<string, Portfolio>; // key: address
-  transactions: Record<string, Transaction[]>; // key: address
-  isLoading: boolean;
-  lastUpdated?: Date;
-  error?: string;
-}
+// Mock data for initial implementation
+const mockTokens: Token[] = [
+  {
+    address: 'So11111111111111111111111111111111111111112',
+    symbol: 'SOL',
+    name: 'Solana',
+    decimals: 9,
+    balance: '12.5456',
+    usdValue: 2180.50,
+    price: 173.80,
+    change24h: 5.2,
+  },
+  {
+    address: '0xA0b86a33E6441b8b03dB53C5B8c1A7F8be3d7A8F',
+    symbol: 'ETH',
+    name: 'Ethereum',
+    decimals: 18,
+    balance: '5.2341',
+    usdValue: 12840.25,
+    price: 2452.30,
+    change24h: -2.1,
+  },
+  {
+    address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+    symbol: 'USDC',
+    name: 'USD Coin',
+    decimals: 6,
+    balance: '399.75',
+    usdValue: 399.75,
+    price: 1.00,
+    change24h: 0.0,
+  },
+];
+
+const mockPortfolio: Portfolio = {
+  totalValue: 15420.50,
+  totalChange24h: 340.25,
+  totalChangePercent24h: 2.26,
+  tokens: mockTokens,
+  lastUpdated: new Date().toISOString(),
+};
+
+export const fetchPortfolio = createAsyncThunk(
+  'portfolio/fetchPortfolio',
+  async ({ address, network }: { address: string; network: 'solana' | 'ethereum' }) => {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return mockPortfolio;
+  }
+);
 
 const initialState: PortfolioState = {
-  portfolios: {},
-  transactions: {},
+  portfolio: null,
   isLoading: false,
+  error: null,
+  selectedAddress: null,
+  selectedNetwork: 'solana',
 };
 
 const portfolioSlice = createSlice({
   name: 'portfolio',
   initialState,
   reducers: {
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
+    setSelectedAddress: (state, action: PayloadAction<string>) => {
+      state.selectedAddress = action.payload;
     },
-    
-    setPortfolio: (state, action: PayloadAction<{ address: string; portfolio: Portfolio }>) => {
-      const { address, portfolio } = action.payload;
-      state.portfolios[address] = portfolio;
-      state.lastUpdated = new Date();
-      state.error = undefined;
+    setSelectedNetwork: (state, action: PayloadAction<'solana' | 'ethereum'>) => {
+      state.selectedNetwork = action.payload;
     },
-    
-    updateTokenBalance: (state, action: PayloadAction<{ 
-      address: string; 
-      tokenBalance: TokenBalance 
-    }>) => {
-      const { address, tokenBalance } = action.payload;
-      const portfolio = state.portfolios[address];
-      
-      if (portfolio) {
-        const existingTokenIndex = portfolio.tokens.findIndex(
-          tb => tb.token.address === tokenBalance.token.address
-        );
-        
-        if (existingTokenIndex >= 0) {
-          portfolio.tokens[existingTokenIndex] = tokenBalance;
-        } else {
-          portfolio.tokens.push(tokenBalance);
-        }
-        
-        // Recalculate total value
-        portfolio.totalValue = portfolio.tokens.reduce((sum, tb) => sum + tb.usdValue, 0);
-        portfolio.lastUpdated = new Date();
-      }
-    },
-    
-    setTransactions: (state, action: PayloadAction<{ 
-      address: string; 
-      transactions: Transaction[] 
-    }>) => {
-      const { address, transactions } = action.payload;
-      state.transactions[address] = transactions;
-    },
-    
-    addTransaction: (state, action: PayloadAction<{ 
-      address: string; 
-      transaction: Transaction 
-    }>) => {
-      const { address, transaction } = action.payload;
-      
-      if (!state.transactions[address]) {
-        state.transactions[address] = [];
-      }
-      
-      // Add to beginning of array (most recent first)
-      state.transactions[address].unshift(transaction);
-      
-      // Keep only last 100 transactions
-      state.transactions[address] = state.transactions[address].slice(0, 100);
-    },
-    
-    updateTransaction: (state, action: PayloadAction<{ 
-      address: string; 
-      hash: string; 
-      updates: Partial<Transaction> 
-    }>) => {
-      const { address, hash, updates } = action.payload;
-      const transactions = state.transactions[address];
-      
-      if (transactions) {
-        const transactionIndex = transactions.findIndex(tx => tx.hash === hash);
-        if (transactionIndex >= 0) {
-          transactions[transactionIndex] = { ...transactions[transactionIndex], ...updates };
-        }
-      }
-    },
-    
-    clearPortfolio: (state, action: PayloadAction<string>) => {
-      const address = action.payload;
-      delete state.portfolios[address];
-      delete state.transactions[address];
-    },
-    
-    clearAllPortfolios: (state) => {
-      state.portfolios = {};
-      state.transactions = {};
-    },
-    
-    setError: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
-      state.isLoading = false;
-    },
-    
     clearError: (state) => {
-      state.error = undefined;
+      state.error = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchPortfolio.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchPortfolio.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.portfolio = action.payload;
+      })
+      .addCase(fetchPortfolio.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to fetch portfolio';
+      });
   },
 });
 
-export const {
-  setLoading,
-  setPortfolio,
-  updateTokenBalance,
-  setTransactions,
-  addTransaction,
-  updateTransaction,
-  clearPortfolio,
-  clearAllPortfolios,
-  setError,
-  clearError,
-} = portfolioSlice.actions;
-
-export default portfolioSlice.reducer; 
+export const { setSelectedAddress, setSelectedNetwork, clearError } = portfolioSlice.actions;
+export default portfolioSlice.reducer;
