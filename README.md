@@ -1,535 +1,353 @@
-# 🚀 DeFi Wallet Mobile
+# DeFi Wallet Mobile
 
-<div align="center">
-  <img src="https://img.shields.io/badge/React%20Native-0.80-blue?style=for-the-badge&logo=react" alt="React Native" />
-  <img src="https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/NestJS-10.0-red?style=for-the-badge&logo=nestjs" alt="NestJS" />
-  <img src="https://img.shields.io/badge/Firebase-9.0-orange?style=for-the-badge&logo=firebase" alt="Firebase" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
-</div>
-
-<div align="center">
-  <h3>🔥 The Ultimate Cross-Platform DeFi Wallet</h3>
-  <p>A powerful React Native mobile wallet with real-time price alerts, seamless swapping, and beautiful UI</p>
-</div>
+A production-ready, cross-platform mobile wallet for decentralized finance. Built with React Native and NestJS, featuring multi-chain support, real-time price alerts, and seamless token swapping through Jupiter and 0x Protocol aggregators.
 
 ---
 
-## 📋 Table of Contents
+## 1. Project Overview
 
-- [🌟 Overview](#-overview)
-- [✨ Features](#-features)
-- [🏗️ Architecture](#️-architecture)
-- [🚀 Quick Start](#-quick-start)
-- [📱 Screenshots](#-screenshots)
-- [🛠️ Development](#️-development)
-- [🧪 Testing](#-testing)
-- [📚 API Documentation](#-api-documentation)
-- [🔧 Configuration](#-configuration)
-- [⚡ Performance](#-performance)
-- [🐛 Troubleshooting](#-troubleshooting)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+### The Problem
 
-## 🌟 Overview
+DeFi users juggle multiple wallets, manually track prices, and navigate complex swap interfaces across different blockchains. Existing mobile wallets either lack DeFi features or provide poor user experiences with slow updates and confusing interfaces.
 
-DeFi Wallet Mobile is a **production-ready**, cross-platform mobile application designed for modern DeFi users. Built with React Native and powered by a robust NestJS backend, it provides seamless access to Solana and Ethereum ecosystems with **real-time price monitoring** and **push notifications**.
+### The Solution
 
-### 🎯 **Why Choose DeFi Wallet Mobile?**
+This mobile wallet unifies portfolio management, price monitoring, and token swapping in a single, polished application. Users manage Solana and Ethereum assets, set custom price alerts with push notifications, and execute swaps through optimized aggregators—all from their phone.
 
-- 🔗 **Multi-Chain Support**: Native integration with Solana and Ethereum
-- 🔔 **Smart Alerts**: Real-time price monitoring with push notifications
-- 🚀 **Lightning Fast**: Optimized swapping with Jupiter and 0x Protocol
-- 🎨 **Beautiful UI**: Modern design with adaptive dark/light themes
-- 📱 **Cross-Platform**: Single codebase for iOS and Android
-- 🛡️ **Secure**: Biometric authentication and encrypted storage
+### Why It Matters
 
-## ✨ Features
+- **Unified experience**: Manage multiple chains without switching apps
+- **Real-time alerts**: Never miss price targets with push notifications
+- **Best swap rates**: Jupiter and 0x aggregators find optimal routes
+- **Production quality**: Biometric auth, encrypted storage, professional UI
+- **Cross-platform**: Single codebase for iOS and Android
 
-### 💼 **Portfolio Management**
+---
 
-| Feature                   | Status      | Description                                               |
-| ------------------------- | ----------- | --------------------------------------------------------- |
-| 📊 **Real-time Balances** | ✅ **Live** | Multi-network portfolio tracking with live USD valuations |
-| 📈 **Price Tracking**     | ✅ **Live** | 24h price changes with real-time updates                  |
-| 🔄 **Portfolio Refresh**  | ✅ **Live** | Pull-to-refresh with automatic background updates         |
-| 🏷️ **Custom Tokens**      | ✅ **Live** | Add ERC-20 and SPL tokens with contract addresses         |
-| 👁️ **Balance Management** | ✅ **Live** | Hide small balances below configurable threshold          |
+## 2. Real-World Use Cases
 
-### 🔔 **Smart Notifications & Price Alerts** 🆕
+| User Type | Application |
+|-----------|-------------|
+| **DeFi Traders** | Monitor portfolio, set price alerts, execute swaps on mobile |
+| **HODLers** | Track long-term holdings with customizable price targets |
+| **Yield Farmers** | Manage positions across Solana and Ethereum protocols |
+| **NFT Collectors** | View token balances associated with NFT activities |
+| **DeFi Developers** | Test wallet integrations with real mobile environment |
+| **Portfolio Managers** | Track multi-chain allocations with real-time valuations |
 
-| Feature                     | Status      | Description                                      |
-| --------------------------- | ----------- | ------------------------------------------------ |
-| 📱 **Push Notifications**   | ✅ **Live** | Cross-platform push notifications (iOS/Android)  |
-| 💰 **Price Alerts**         | ✅ **Live** | Custom price targets with above/below conditions |
-| 🕒 **Real-time Monitoring** | ✅ **Live** | Background price checking every 30 seconds       |
-| ⚙️ **Alert Management**     | ✅ **Live** | Create, edit, delete, and toggle price alerts    |
-| 🎯 **Smart Triggers**       | ✅ **Live** | Anti-spam protection with 5-minute cooldown      |
-| 📊 **Alert Analytics**      | ✅ **Live** | Trigger history and performance statistics       |
-| 🔕 **Notification Control** | ✅ **Live** | Granular notification preferences                |
+---
 
-### 🔄 **Advanced Swap Engine**
+## 3. Core Features
 
-| Feature                   | Status      | Description                                           |
-| ------------------------- | ----------- | ----------------------------------------------------- |
-| 🌪️ **Jupiter Aggregator** | ✅ **Live** | Best rates across Solana DEXs with route optimization |
-| 🎯 **0x Protocol**        | ✅ **Live** | Optimal routing for Ethereum trades                   |
-| 💡 **Smart Routing**      | ✅ **Live** | Automatic best price discovery                        |
-| ⚙️ **Custom Slippage**    | ✅ **Live** | Fine-tune trading parameters (0.1% - 5%)              |
-| 🔄 **Route Comparison**   | ✅ **Live** | Compare multiple swap routes and fees                 |
-| ⚡ **Fast Execution**     | ✅ **Live** | One-tap swap execution with confirmation              |
+| Feature | Business Value |
+|---------|----------------|
+| **Multi-Chain Portfolio** | Real-time balance tracking across Solana and Ethereum with USD valuations |
+| **Price Alerts** | Custom price targets with above/below conditions and push notifications |
+| **Jupiter Swaps** | Best rates across Solana DEXs with route optimization |
+| **0x Protocol Swaps** | Optimal Ethereum routing with aggregated liquidity |
+| **Transaction History** | Unified view of all transactions across networks |
+| **Biometric Security** | Face ID/Touch ID protection with encrypted storage |
+| **Custom Tokens** | Add ERC-20 and SPL tokens by contract address |
+| **Theme Support** | Dark/light modes with system preference detection |
 
-### 📋 **Transaction Management**
+---
 
-| Feature                    | Status      | Description                                  |
-| -------------------------- | ----------- | -------------------------------------------- |
-| 📝 **Transaction History** | ✅ **Live** | Complete transaction records across networks |
-| 🔍 **Smart Search**        | ✅ **Live** | Search by hash, token, or amount             |
-| 🏷️ **Transaction Types**   | ✅ **Live** | Categorized as Send, Receive, Swap, etc.     |
-| 📊 **Status Tracking**     | ✅ **Live** | Real-time transaction status updates         |
-| 🌐 **Multi-Network**       | ✅ **Live** | Unified history across Solana and Ethereum   |
+## 4. High-Level Architecture
 
-### 🎨 **Premium UI/UX**
-
-| Feature                  | Status      | Description                                |
-| ------------------------ | ----------- | ------------------------------------------ |
-| 🌗 **Adaptive Themes**   | ✅ **Live** | Dark/Light/System with real-time switching |
-| 📱 **Responsive Design** | ✅ **Live** | Optimized for all screen sizes             |
-| ⚡ **Smooth Animations** | ✅ **Live** | 60fps animations throughout                |
-| 🎛️ **Customization**     | ✅ **Live** | Personalize interface, currency, language  |
-| 🔄 **Pull-to-Refresh**   | ✅ **Live** | Intuitive refresh gestures                 |
-
-### ⚙️ **Settings & Security**
-
-| Feature                  | Status      | Description                                                 |
-| ------------------------ | ----------- | ----------------------------------------------------------- |
-| 👆 **Biometric Auth**    | ✅ **Live** | Fingerprint/Face ID app unlock                              |
-| 🔐 **PIN Protection**    | ✅ **Live** | 4-6 digit PIN with auto-lock                                |
-| 💱 **Multi-Currency**    | ✅ **Live** | USD, EUR, GBP, JPY, BTC, ETH support                        |
-| 🌍 **Multi-Language**    | ✅ **Live** | English, Spanish, French, German, Japanese, Korean, Chinese |
-| 🔧 **Advanced Settings** | ✅ **Live** | Custom RPCs, network management, developer options          |
-
-## 🏗️ Architecture
-
-```mermaid
-graph TB
-    subgraph "📱 React Native Frontend"
-        A[Screens] --> B[Redux Store]
-        B --> C[RTK Query]
-        C --> D[API Services]
-        A --> E[Notification Service]
-        A --> F[Theme System]
-    end
-
-    subgraph "🖥️ NestJS Backend"
-        G[API Gateway] --> H[Notifications Module]
-        H --> I[Price Alert Service]
-        H --> J[Push Notification Service]
-        G --> K[Portfolio Service]
-        G --> L[Swap Service]
-    end
-
-    subgraph "🔗 Blockchain Networks"
-        M[Solana RPC]
-        N[Ethereum RPC]
-        O[Jupiter API]
-        P[0x Protocol]
-    end
-
-    subgraph "☁️ External Services"
-        Q[Firebase FCM]
-        R[CoinGecko API]
-    end
-
-    D --> G
-    I --> M
-    I --> N
-    K --> O
-    L --> P
-    J --> Q
-    G --> R
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                      DeFi Wallet Mobile                              │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌───────────────────┐    ┌───────────────────┐    ┌─────────────┐  │
+│  │   React Native    │    │     NestJS        │    │  Blockchain │  │
+│  │   Mobile App      │◄──►│     Backend       │◄──►│  Networks   │  │
+│  │                   │    │                   │    │             │  │
+│  │ • Redux Toolkit   │    │ • REST API        │    │ • Solana    │  │
+│  │ • React Navigation│    │ • Price Alerts    │    │ • Ethereum  │  │
+│  │ • Firebase FCM    │    │ • Push Service    │    │             │  │
+│  │ • Secure Storage  │    │ • Portfolio API   │    │             │  │
+│  └───────────────────┘    └───────────────────┘    └─────────────┘  │
+│           │                        │                      │          │
+│           └────────────────────────┼──────────────────────┘          │
+│                                    │                                 │
+│  ┌─────────────────────────────────▼─────────────────────────────┐  │
+│  │                     External Services                          │  │
+│  │  • Jupiter API  • 0x Protocol  • CoinGecko  • Firebase FCM    │  │
+│  └────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
-### 🛠️ **Tech Stack**
+---
 
-#### **Frontend (React Native)**
+## 5. Tech Stack
 
-- **Framework**: React Native 0.80 with TypeScript
-- **State Management**: Redux Toolkit + RTK Query
-- **Navigation**: React Navigation 6
-- **Push Notifications**: React Native Firebase
-- **Secure Storage**: React Native Keychain
-- **Themes**: Custom theme system with context
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| **Mobile Framework** | React Native 0.80, TypeScript | Cross-platform iOS/Android |
+| **State Management** | Redux Toolkit, RTK Query | Application state and API caching |
+| **Navigation** | React Navigation 6 | Screen routing and deep linking |
+| **Push Notifications** | React Native Firebase | Cross-platform push alerts |
+| **Secure Storage** | React Native Keychain | Encrypted credential storage |
+| **Backend** | NestJS 10, TypeScript | REST API and background jobs |
+| **Price Data** | CoinGecko API | Real-time cryptocurrency prices |
+| **Solana Swaps** | Jupiter Aggregator | DEX aggregation for best rates |
+| **Ethereum Swaps** | 0x Protocol | Liquidity aggregation |
+| **Blockchain RPC** | Solana/Ethereum nodes | Direct blockchain interaction |
 
-#### **Backend (NestJS)**
+---
 
-- **Framework**: NestJS 10 with TypeScript
-- **APIs**: RESTful with Swagger documentation
-- **Background Jobs**: Cron jobs for price monitoring
-- **Validation**: Class-validator with DTOs
-- **Architecture**: Modular with dependency injection
+## 6. How the System Works
 
-## 🚀 Quick Start
+### Portfolio Loading Flow
 
-### ⚡ **Installation**
+```
+App Launch → Fetch Balances → Get Prices → Calculate USD Values → Display
+```
+
+1. **Launch**: App initializes with stored wallet addresses
+2. **Balances**: Query Solana and Ethereum RPCs for token balances
+3. **Prices**: Fetch current prices from CoinGecko
+4. **Calculate**: Multiply balances by prices for USD values
+5. **Display**: Render portfolio with 24h change indicators
+
+### Price Alert Flow
+
+```
+Create Alert → Backend Stores → Monitor Prices → Trigger → Push Notification
+```
+
+1. **Create**: User sets token, condition (above/below), target price
+2. **Store**: Backend saves alert with user's FCM token
+3. **Monitor**: Cron job checks prices every 30 seconds
+4. **Evaluate**: Compare current prices against alert conditions
+5. **Trigger**: Send push notification when condition met
+6. **Cooldown**: 5-minute cooldown prevents notification spam
+
+### Token Swap Flow
+
+```
+Select Tokens → Get Quote → Review Route → Sign Transaction → Confirm
+```
+
+1. **Select**: User chooses input/output tokens and amount
+2. **Quote**: Fetch optimal route from Jupiter (Solana) or 0x (Ethereum)
+3. **Preview**: Display rate, price impact, and fees
+4. **Sign**: User approves transaction with wallet
+5. **Broadcast**: Submit to blockchain network
+6. **Track**: Monitor until confirmation received
+
+---
+
+## 7. Setup & Run
+
+### Prerequisites
+
+- Node.js 18+
+- React Native CLI and development environment
+- Android Studio or Xcode
+- Firebase project (for push notifications)
+
+### Quick Start
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/your-org/defi-wallet-mobile.git
 cd defi-wallet-mobile
 
 # Install dependencies
 npm install
-
-# Install frontend dependencies
 cd frontend && npm install
-
-# Install backend dependencies
 cd ../backend && npm install
+
+# Configure environment
+cp frontend/.env.example frontend/.env
+cp backend/.env.example backend/.env
+
+# Start backend
+cd backend && npm run start:dev
+
+# Start mobile app
+cd frontend && npm start
+npm run ios  # or npm run android
 ```
 
-### 🖥️ **Backend Setup**
+### Environment Configuration
 
 ```bash
-# Start backend development server
-cd backend
-npm run start:dev
+# Frontend (.env)
+API_BASE_URL=http://localhost:3000/api
+SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/YOUR_KEY
+FIREBASE_API_KEY=your-firebase-api-key
 
-# Backend will run on http://localhost:3000
-# API docs available at http://localhost:3000/api/docs
+# Backend (.env)
+PORT=3000
+SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/YOUR_KEY
+COINGECKO_API_URL=https://api.coingecko.com/api/v3
+JUPITER_API_URL=https://quote-api.jup.ag/v6
 ```
 
-### 📱 **Frontend Setup**
+### Access Points
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| **Backend API** | http://localhost:3000 | REST API server |
+| **API Docs** | http://localhost:3000/api/docs | Swagger documentation |
+| **Mobile App** | Device/Simulator | React Native application |
+
+---
+
+## 8. API & Usage
+
+### Create Price Alert
 
 ```bash
-# Start Metro bundler
-cd frontend
-npm start
-
-# Run on iOS (requires macOS and Xcode)
-npm run ios
-
-# Run on Android (requires Android Studio)
-npm run android
+curl -X POST http://localhost:3000/api/notifications/price-alerts/user123 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tokenSymbol": "BTC",
+    "condition": "above",
+    "targetPrice": 50000,
+    "network": "ethereum"
+  }'
 ```
 
-### 🔥 **One-Command Development**
+### Get Portfolio
 
 ```bash
-# Terminal 1: Start backend
-npm run backend
-
-# Terminal 2: Start frontend
-npm run frontend
-
-# Terminal 3: Run on device
-npm run ios # or npm run android
+curl http://localhost:3000/api/portfolio/0x123...?network=ethereum
 ```
 
-## 📱 Screenshots
+**Response**:
+```json
+{
+  "totalValue": 15420.50,
+  "totalChange24h": 340.25,
+  "tokens": [
+    {
+      "symbol": "ETH",
+      "balance": "2.5",
+      "price": 3200.00,
+      "value": 8000.00,
+      "change24h": 2.5
+    }
+  ],
+  "lastUpdated": "2024-01-15T12:00:00Z"
+}
+```
 
-<div align="center">
-  
-  **Portfolio Management**
-  
-  <img src="docs/screenshots/portfolio-light.png" width="200" alt="Portfolio Light" />
-  <img src="docs/screenshots/portfolio-dark.png" width="200" alt="Portfolio Dark" />
-  
-  **Price Alerts & Swapping**
-  
-  <img src="docs/screenshots/price-alerts.png" width="200" alt="Price Alerts" />
-  <img src="docs/screenshots/swap.png" width="200" alt="Swap Interface" />
-  
-  **Transaction History & Settings**
-  
-  <img src="docs/screenshots/transactions.png" width="200" alt="Transactions" />
-  <img src="docs/screenshots/settings.png" width="200" alt="Settings" />
-  
-</div>
+### Get Swap Quote
 
-## 🧪 Testing
+```bash
+curl -X POST http://localhost:3000/api/swap/jupiter/quote \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inputMint": "SOL",
+    "outputMint": "USDC",
+    "amount": "1.0",
+    "slippageBps": 50
+  }'
+```
 
-### 🎯 **Running Tests**
+---
+
+## 9. Scalability & Production Readiness
+
+### Current Architecture Strengths
+
+| Aspect | Implementation |
+|--------|----------------|
+| **Cross-Platform** | Single React Native codebase for iOS and Android |
+| **Real-time Updates** | RTK Query with smart cache invalidation |
+| **Security** | Biometric auth, encrypted storage, secure API communication |
+| **Multi-Chain** | Modular network adapters for Solana and Ethereum |
+| **Push Infrastructure** | Firebase FCM for reliable cross-platform notifications |
+
+### Production Enhancements (Recommended)
+
+| Enhancement | Purpose |
+|-------------|---------|
+| **Hardware Wallets** | Ledger/Trezor integration for enhanced security |
+| **Additional Chains** | Polygon, Arbitrum, Base network support |
+| **Advanced Charts** | TradingView-style price charts and technical analysis |
+| **Cross-Chain Bridge** | Native bridging between supported networks |
+| **NFT Portfolio** | Display and manage NFT holdings |
+| **DeFi Integrations** | Direct staking and yield farming access |
+
+---
+
+## 10. Screenshots & Demo
+
+### Suggested Visuals
+
+- [ ] Portfolio dashboard with token list and total value
+- [ ] Price alert creation interface
+- [ ] Swap interface with route preview
+- [ ] Transaction history with status indicators
+- [ ] Settings screen with security options
+- [ ] Push notification example on device
+
+---
+
+## Project Structure
+
+```
+defi-wallet-mobile/
+├── frontend/                 # React Native application
+│   ├── src/
+│   │   ├── screens/        # Screen components
+│   │   ├── components/     # Reusable UI components
+│   │   ├── store/          # Redux store and slices
+│   │   ├── services/       # API services
+│   │   ├── hooks/          # Custom hooks
+│   │   └── theme/          # Theme configuration
+│   └── package.json
+├── backend/                  # NestJS API server
+│   ├── src/
+│   │   ├── portfolio/      # Portfolio module
+│   │   ├── notifications/  # Price alerts and push
+│   │   ├── swap/           # Swap aggregation
+│   │   └── blockchain/     # RPC interactions
+│   └── package.json
+└── README.md
+```
+
+---
+
+## Testing
 
 ```bash
 # Backend tests
-cd backend
-npm run test
+cd backend && npm run test
 
 # Frontend tests
-cd frontend
-npm test
+cd frontend && npm test
 
 # E2E tests
 npm run test:e2e
 
-# Coverage reports
+# Coverage
 npm run test:coverage
 ```
 
-### 📊 **Test Coverage**
-
-- **Backend**: 85%+ test coverage
-- **Frontend**: 80%+ test coverage
-- **API Endpoints**: 100% integration tested
-- **Critical Paths**: End-to-end tested
-
-## 📚 API Documentation
-
-### 🌐 **Interactive Docs**
-
-Visit `http://localhost:3000/api/docs` after starting the backend for complete Swagger documentation.
-
-### 🔑 **Key Endpoints**
-
-#### **Price Alerts**
-
-```typescript
-// Create price alert
-POST /api/notifications/price-alerts/{userId}
-Body: {
-  tokenSymbol: "BTC",
-  condition: "above",
-  targetPrice: 50000,
-  network: "ethereum"
-}
-
-// Get user alerts
-GET /api/notifications/price-alerts/{userId}
-Response: Array<PriceAlert>
-
-// Toggle alert
-POST /api/notifications/price-alerts/{userId}/{alertId}/toggle
-```
-
-#### **Portfolio**
-
-```typescript
-// Get portfolio
-GET /api/portfolio/{address}?network=ethereum
-Response: {
-  totalValue: 15420.50,
-  totalChange24h: 340.25,
-  tokens: [...],
-  lastUpdated: "2024-01-01T12:00:00Z"
-}
-```
-
-#### **Swap**
-
-```typescript
-// Get swap quote
-POST /api/swap/jupiter/quote
-Body: {
-  inputMint: "SOL",
-  outputMint: "USDC",
-  amount: "1.0",
-  slippageBps: 50
-}
-```
-
-## 🔧 Configuration
-
-### 🌍 **Environment Variables**
-
-#### **Frontend (.env)**
-
-```bash
-# API Configuration
-API_BASE_URL=http://localhost:3000/api
-
-# Blockchain Networks
-SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
-ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/YOUR_KEY
-
-# External APIs
-JUPITER_API_URL=https://quote-api.jup.ag/v6
-ZEROX_API_URL=https://api.0x.org
-
-# Firebase (for push notifications)
-FIREBASE_API_KEY=your-firebase-api-key
-FIREBASE_PROJECT_ID=your-project-id
-```
-
-#### **Backend (.env)**
-
-```bash
-# Server Configuration
-PORT=3000
-NODE_ENV=development
-
-# Blockchain RPCs
-SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
-ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/YOUR_KEY
-
-# External APIs
-COINGECKO_API_URL=https://api.coingecko.com/api/v3
-JUPITER_API_URL=https://quote-api.jup.ag/v6
-
-# Rate Limiting
-RATE_LIMIT_TTL=60
-RATE_LIMIT_MAX=100
-```
-
-## ⚡ Performance
-
-### 📊 **Performance Metrics**
-
-| Metric            | Target  | Current  |
-| ----------------- | ------- | -------- |
-| 🚀 App Launch     | < 3s    | **2.1s** |
-| 💼 Portfolio Load | < 2s    | **1.4s** |
-| 🔄 Swap Quote     | < 1s    | **0.8s** |
-| 🔔 Alert Response | < 0.5s  | **0.3s** |
-| 📱 Memory Usage   | < 100MB | **78MB** |
-
-### 🛠️ **Optimization Features**
-
-- ⚡ **Redux RTK Query** caching with smart invalidation
-- 🎯 **Memoized components** for optimal re-renders
-- 📱 **Lazy loading** for better startup performance
-- 🔄 **Background sync** for real-time data
-- 📊 **Virtual lists** for large transaction histories
-
-## 🐛 Troubleshooting
-
-### 🔧 **Common Issues**
-
-#### **Metro/Build Issues**
-
-```bash
-# Clear all caches
-npx react-native start --reset-cache
-cd frontend && rm -rf node_modules && npm install
-```
-
-#### **Push Notifications Not Working**
-
-```bash
-# Check Firebase configuration
-# Verify permissions in device settings
-# Test with debug console in app
-```
-
-#### **Price Alerts Not Triggering**
-
-```bash
-# Check backend logs for price monitoring
-# Verify network connectivity
-# Check alert conditions and current prices
-```
-
-#### **Swap Failures**
-
-```bash
-# Check slippage tolerance
-# Verify sufficient balance for fees
-# Try smaller amount first
-```
-
-### 📱 **Platform Issues**
-
-#### **iOS Simulator**
-
-```bash
-# Reset simulator
-xcrun simctl erase all
-npx react-native run-ios --simulator="iPhone 15 Pro"
-```
-
-#### **Android Emulator**
-
-```bash
-# Start fresh emulator
-emulator -avd Pixel_7_API_33
-npx react-native run-android
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### 🌟 **How to Contribute**
-
-1. **Fork the repo** and create your feature branch
-2. **Add tests** for any new functionality
-3. **Run the test suite** to ensure nothing breaks
-4. **Submit a PR** with a clear description
-
-### 📝 **Development Guidelines**
-
-- ✅ Use TypeScript for all new code
-- ✅ Follow existing code style and patterns
-- ✅ Add tests for new features
-- ✅ Update documentation as needed
-- ✅ Test on both iOS and Android
-
-## 🚨 **Current Implementation Status**
-
-### ✅ **Fully Implemented**
-
-- 💼 Portfolio management with real-time updates
-- 🔄 Token swapping (Jupiter + 0x Protocol)
-- 📋 Transaction history with search/filter
-- 🔔 Push notifications & price alerts system
-- ⚙️ Comprehensive settings and customization
-- 🎨 Complete theme system (dark/light/system)
-- 📱 Cross-platform iOS/Android support
-
-### 🚧 **Coming Soon (Roadmap)**
-
-- 🔗 Hardware wallet integration (Ledger, Trezor)
-- 🎨 Advanced charts and technical analysis
-- 🌉 Cross-chain bridge functionality
-- 🎮 NFT portfolio management
-- 🏦 DeFi lending and borrowing
-
-## 📊 **Project Statistics**
-
-- 📦 **Total Files**: 150+
-- 💻 **Lines of Code**: 25,000+
-- 🧪 **Test Coverage**: 85%+
-- 📱 **Supported Platforms**: iOS 12+, Android API 21+
-- 🌐 **Networks**: Solana, Ethereum (+ testnets)
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-## ⚠️ Security Disclaimer
-
-**Important Security Notice:**
-
-- 🔒 This software is provided "as is" without warranty
-- 💰 Users are responsible for their funds and private keys
-- 🚨 Always verify transactions before confirming
-- 🔐 Never share private keys or seed phrases
-- 🧪 Test with small amounts first
-
-## 🆘 Support & Community
-
-### 💬 **Get Help**
-
-- 🐛 **Issues**: [GitHub Issues](https://github.com/your-org/defi-wallet-mobile/issues)
-- 📧 **Email**: support@defiwallet.mobile
-- 💬 **Discord**: [Join our community](https://discord.gg/defiwallet)
-
-### 🌟 **Follow Updates**
-
-- 🐦 **Twitter**: [@DefiWalletMobile](https://twitter.com/defiwallet)
-- 📘 **Blog**: [Medium](https://medium.com/@defiwallet)
+---
+
+## Security Notice
+
+- This software is provided "as is" without warranty
+- Users are responsible for their funds and private keys
+- Always verify transactions before confirming
+- Never share private keys or seed phrases
+- Test with small amounts first
 
 ---
 
-<div align="center">
-  <h3>🚀 Ready to revolutionize your DeFi experience?</h3>
-  <p>
-    <a href="#-quick-start">Get Started</a> •
-    <a href="#-contributing">Contribute</a> •
-    <a href="https://discord.gg/defiwallet">Join Community</a>
-  </p>
-  
-  <p><strong>Built with ❤️ for the DeFi community</strong></p>
-  
-  <sub>⭐ Star this repo if you found it helpful!</sub>
-</div>
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+*Your gateway to decentralized finance, in your pocket.*
